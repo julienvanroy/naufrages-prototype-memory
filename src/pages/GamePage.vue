@@ -1,11 +1,23 @@
 <template>
-  <div>Memory Game</div>
+  <br/>
+  <br/>
   <div class="flex">
     <button @click="generateGame">Generate Game</button>
+    <button @click="nextRound">Next Round</button>
     <button @click="clear">Clear</button>
   </div>
+  <br/>
+  <div>
+    <span>Memory Game : </span>
+    <strong v-if="cards.length === 0">Need Generate Cards</strong>
+    <strong v-else-if="canReveal" :style="{color: players[roundPlayer].color}">{{ players[roundPlayer].name }} can play</strong>
+    <strong v-else-if="isGameOver" :style="{color: players[roundPlayer].color}">{{ players[roundPlayer].name }} WIN !!! ( you can reset the board )</strong>
+    <strong v-else :style="{color: players[roundPlayer].color}">Next Player / Next Round</strong>
+  </div>
+  <br/>
   <div class="flex">
-    <TheCard v-for="(card, index) in cards" :key="index" :color="card.color" :is-reveal="card.isReveal" @click="() => card.isReveal = true"/>
+    <TheCard v-for="(card, index) in cards" :key="index" :color="card.color" :is-reveal="card.isReveal"
+             @click="revealCard(card)"/>
   </div>
 </template>
 
@@ -33,7 +45,11 @@ export default {
           color: 'green'
         },
       ],
-      cards: []
+      roundPlayer: 0,
+      cards: [],
+      canReveal: false,
+      isGameOver: false,
+      numberCardReveal: 0
     }
   },
   components: {TheCard},
@@ -50,9 +66,12 @@ export default {
       })
 
       shuffle(this.cards)
+
+      this.roundPlayer = 0
+      this.canReveal = true
     },
     pushCards(number, color) {
-      for(let i = 0; i < number; i++) {
+      for (let i = 0; i < number; i++) {
         const card = {
           color: color,
           isReveal: false
@@ -60,8 +79,39 @@ export default {
         this.cards.push(card)
       }
     },
+    revealCard(card) {
+      if (card.isReveal || !this.canReveal) return
+      card.isReveal = true
+      this.checkCard(card)
+    },
+    checkCard(card) {
+      if(card.color === this.players[this.roundPlayer].color) {
+        this.numberCardReveal++
+        this.checkGameOver()
+      } else this.canReveal = false
+    },
+    checkGameOver() {
+      if(this.numberCardReveal >= this.players.length) {
+        this.isGameOver = true
+        this.canReveal = false
+      }
+    },
+    nextRound() {
+      // Reset reveal cards
+      this.cards.map(card => card.isReveal = false)
+
+      // Next Player
+      if (++this.roundPlayer >= this.players.length) this.roundPlayer = 0
+
+      // Can reveal card
+      this.canReveal = true
+    },
     clear() {
       this.cards = []
+      this.roundPlayer = 0
+      this.canReveal = false
+      this.isGameOver =  false
+      this.numberCardReveal = 0
     }
   }
 }
@@ -76,6 +126,10 @@ export default {
 
   > div {
     margin: 1rem;
+  }
+
+  > button {
+    margin: 0 0.5rem;
   }
 }
 </style>

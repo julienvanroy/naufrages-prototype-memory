@@ -4,6 +4,7 @@
   <div class="flex">
     <button @click="generateGame" v-if="cards.length === 0">Generate Game</button>
     <button @click="nextRound" v-if="cards.length !== 0">Next Round</button>
+    <button @click="rotation" v-if="cards.length !== 0">Rotate Round</button>
     <button @click="clear" v-if="cards.length !== 0">Clear Game</button>
   </div>
   <br/>
@@ -15,7 +16,7 @@
     <strong v-else :style="{color: players[roundPlayer].color}">Next Player / Next Round</strong>
   </div>
   <br/>
-  <div class="flex">
+  <div class="flex" v-if="cards.length !== 0" :style="{transform: `rotate(${rotationAngle}deg)`, height: '100vw'}">
     <TheCard v-for="(card, index) in cards" :key="index" :color="card.color" :is-reveal="card.isReveal"
              @click="revealCard(card)"/>
   </div>
@@ -49,7 +50,8 @@ export default {
       cards: [],
       canReveal: false,
       isGameOver: false,
-      numberCardReveal: 0
+      numberCardReveal: 0,
+      rotationAngle: 0
     }
   },
   components: {TheCard},
@@ -106,6 +108,9 @@ export default {
       // Can reveal card
       this.canReveal = true
     },
+    rotation() {
+      this.rotationAngle += 90
+    },
     clear() {
       this.cards = []
       this.roundPlayer = 0
@@ -123,6 +128,7 @@ export default {
   flex-wrap: wrap;
   margin: auto;
   justify-content: center;
+  transition: transform 0.6s ease;
 
   > div {
     margin: 1rem;

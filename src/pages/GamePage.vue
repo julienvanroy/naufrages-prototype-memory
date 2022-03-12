@@ -4,6 +4,8 @@
   <div class="flex">
     <button @click="generateGame" v-if="cards.length === 0">Generate Game</button>
     <button @click="nextRound" v-if="cards.length !== 0">Next Round</button>
+    <button @click="() => {canReveal = true; canSwitch = false }" v-if="cards.length !== 0 && !canReveal">Can Reveal Card</button>
+    <button @click="() => {canReveal = false; canSwitch = true}" v-if="cards.length !== 0 && !canSwitch">Can Switch Card</button>
     <button @click="rotation" v-if="cards.length !== 0">Rotate Round</button>
     <button @click="clear" v-if="cards.length !== 0">Clear Game</button>
   </div>
@@ -11,14 +13,18 @@
   <div>
     <span>Memory Game : </span>
     <strong v-if="cards.length === 0">Need Generate Cards</strong>
-    <strong v-else-if="canReveal" :style="{color: players[roundPlayer].color}">{{ players[roundPlayer].name }} can play</strong>
+    <strong v-else-if="canReveal" :style="{color: players[roundPlayer].color}">{{ players[roundPlayer].name }} can reveal card</strong>
+    <strong v-else-if="canSwitch" :style="{color: players[roundPlayer].color}">{{ players[roundPlayer].name }} can switch card</strong>
     <strong v-else-if="isGameOver" :style="{color: players[roundPlayer].color}">{{ players[roundPlayer].name }} WIN !!! ( you can reset the board )</strong>
-    <strong v-else :style="{color: players[roundPlayer].color}">Next Player / Next Round</strong>
+    <strong v-else :style="{color: players[roundPlayer].color}">
+      <span v-if="indexCardWantToSwitch !== null">Switch is Ok /</span>
+      Next Player / Next Round
+    </strong>
   </div>
   <br/>
   <div class="flex" v-if="cards.length !== 0" :style="{transform: `rotate(${rotationAngle}deg)`, height: '100vw'}">
     <TheCard v-for="(card, index) in cards" :key="index" :color="card.color" :is-reveal="card.isReveal"
-             @click="revealCard(card)"/>
+             @click="clickCard(card,index)" :style="{transform: this.indexCardWantToSwitch === index ? 'scale(1.1)' : null}"/>
   </div>
 </template>
 
@@ -49,6 +55,8 @@ export default {
       roundPlayer: 0,
       cards: [],
       canReveal: false,
+      canSwitch: false,
+      indexCardWantToSwitch: null,
       isGameOver: false,
       numberCardReveal: 0,
       rotationAngle: 0
@@ -86,6 +94,22 @@ export default {
       card.isReveal = true
       this.checkCard(card)
     },
+    switchCard(card, index) {
+      if (!this.canSwitch) return
+      if(this.indexCardWantToSwitch !== null) {
+        if(this.indexCardWantToSwitch !== index) {
+          [this.cards[this.indexCardWantToSwitch], this.cards[index]] = [this.cards[index], this.cards[this.indexCardWantToSwitch]]
+          this.canSwitch = false
+          this.indexCardWantToSwitch = index
+        } else this.indexCardWantToSwitch = null
+      } else {
+        this.indexCardWantToSwitch = index
+      }
+    },
+    clickCard(card, index) {
+      this.revealCard(card)
+      this.switchCard(card, index)
+    },
     checkCard(card) {
       if(card.color === this.players[this.roundPlayer].color) {
         this.numberCardReveal++
@@ -99,6 +123,8 @@ export default {
       }
     },
     nextRound() {
+      this.indexCardWantToSwitch = null
+
       // Reset reveal cards
       this.cards.map(card => card.isReveal = false)
 
@@ -115,8 +141,10 @@ export default {
       this.cards = []
       this.roundPlayer = 0
       this.canReveal = false
+      this.canSwitch = false
       this.isGameOver =  false
       this.numberCardReveal = 0
+      this.indexCardWantToSwitch = null
     }
   }
 }

@@ -2,9 +2,9 @@
   <br/>
   <br/>
   <div class="flex">
-    <button @click="generateGame">Generate Game</button>
-    <button @click="nextRound">Next Round</button>
-    <button @click="clear">Clear</button>
+    <button @click="generateGame" v-if="cards.length === 0">Generate Game</button>
+    <button @click="nextRound" v-if="cards.length !== 0">Next Round</button>
+    <button @click="clear" v-if="cards.length !== 0">Clear Game</button>
   </div>
   <br/>
   <div>

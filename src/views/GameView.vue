@@ -84,7 +84,8 @@ export default {
       for (let i = 0; i < number; i++) {
         const card = {
           color: color,
-          isReveal: false
+          isReveal: false,
+          hasReveal: false
         }
         this.cards.push(card)
       }
@@ -114,7 +115,18 @@ export default {
       if(card.color === this.players[this.roundPlayer].color) {
         this.numberCardReveal++
         this.checkGameOver()
-      } else this.canReveal = false
+      } else {
+        this.checkCardHasReveal(card)
+        this.canReveal = false
+      }
+    },
+    checkCardHasReveal(card) {
+      if(card.hasReveal) {
+        if(card.color === 'grey') {
+          const changeColor = () =>  {card.color = this.players[this.roundPlayer].color}
+          setTimeout(changeColor, 1000)
+        }
+      } else card.hasReveal = true
     },
     checkGameOver() {
       if(this.numberCardReveal >= this.players.length) {

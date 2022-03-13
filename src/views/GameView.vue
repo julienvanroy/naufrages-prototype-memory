@@ -33,7 +33,7 @@ import TheCard from "@/components/game/TheCard";
 import {shuffle} from "@/utils";
 
 export default {
-  name: 'GamePage',
+  name: 'GameView',
   data() {
     return {
       players: [

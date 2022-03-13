@@ -7,7 +7,7 @@
 import HelloWorld from '../components/HelloWorld.vue'
 
 export default {
-  name: 'HomePage',
+  name: 'HomeView',
   components: {
     HelloWorld
   }

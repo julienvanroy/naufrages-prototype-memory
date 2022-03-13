@@ -19,6 +19,11 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: $black-color;
-  margin-top: 60px;
+
+  #nav {
+    border-bottom: 1px solid $black-color;
+    padding-bottom: 1rem;
+    margin: 0 4rem;
+  }
 }
 </style>

@@ -1,5 +1,6 @@
 <template>
   <br/>
+  <TheTimer :duration="durationTimer" :debug="true"/>
   <br/>
   <div class="flex">
     <button @click="generateGame" v-if="cards.length === 0">Generate Game</button>
@@ -31,6 +32,7 @@
 <script>
 import TheCard from "@/components/game/TheCard";
 import {shuffle} from "@/utils";
+import TheTimer from "@/components/TheTimer";
 
 export default {
   name: 'GameView',
@@ -59,10 +61,20 @@ export default {
       indexCardWantToSwitch: null,
       isGameOver: false,
       numberCardReveal: 0,
-      rotationAngle: 0
+      rotationAngle: 0,
+      durationTimer: 15
     }
   },
-  components: {TheCard},
+  components: {TheTimer, TheCard},
+  mounted() {
+    /**
+     * This is a test watch props for timer
+     * TODO: Delete him after tests
+     */
+    setTimeout(() => {
+      this.durationTimer = 10
+    }, 3000)
+  },
   methods: {
     generateGame() {
       const length = this.players.length

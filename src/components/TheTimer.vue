@@ -1,9 +1,11 @@
 <template>
-  <div class="timer">{{ time }}</div>
-  <div v-if="debug">
-    <button v-if="!isRunning" @click="start">Start</button>
-    <button v-if="isRunning" @click="stop">Stop</button>
-    <button @click="reset">Reset</button>
+  <div class="timer">
+    <span>{{ prettify }}</span>
+    <div v-if="debug">
+      <button v-if="!isRunning" @click="start" id="start">Start</button>
+      <button v-if="isRunning" @click="stop" id="stop">Stop</button>
+      <button @click="reset" id="reset">Reset</button>
+    </div>
   </div>
 </template>
 
@@ -32,6 +34,20 @@ export default {
     return {
       time,
       setTimeWithDuration
+    }
+  },
+  computed: {
+    prettify() {
+      const value = this.time
+      let minutes = Math.floor(value / 60);
+      let seconds = value % 60;
+      if (minutes < 10) {
+        minutes = "0"+minutes
+      }
+      if (seconds < 10) {
+        seconds = `0${seconds}`
+      }
+      return `${minutes}:${seconds}`
     }
   },
   mounted() {
@@ -73,3 +89,44 @@ export default {
   },
 }
 </script>
+
+<style lang="scss" scoped>
+.timer {
+  > div {
+    display: flex;
+
+    > button {
+      border: none;
+      padding: 0.25rem 0.5rem;
+      font-weight: bold;
+      transition:  0.1s ease;
+
+      &:hover {
+        opacity: 0.9;
+      }
+
+      &:active {
+        transform: scale(0.9);
+      }
+
+      &#start {
+        background: $green-color;
+        color: $white-color;
+      }
+
+      &#stop {
+        background: $red-color;
+        color: $white-color;
+      }
+
+      &:first-child {
+        border-radius: 2rem 0 0 2rem;
+      }
+
+      &:last-child {
+        border-radius: 0 2rem 2rem 0;
+      }
+    }
+  }
+}
+</style>

@@ -24,5 +24,6 @@ export default {
   width: 16rem;
   height: 16rem;
   background: black;
+  margin: 1rem;
 }
 </style>

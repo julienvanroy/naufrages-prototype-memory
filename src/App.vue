@@ -1,9 +1,11 @@
 <template>
+  <div id="view">
+    <router-view/>
+  </div>
   <div id="nav">
     <router-link to="/">Game</router-link> |
     <router-link to="/dev">For developers</router-link>
   </div>
-  <router-view/>
 </template>
 
 <script>
@@ -21,9 +23,13 @@ export default {
   color: $black-color;
 
   #nav {
-    border-bottom: 1px solid $black-color;
-    padding-bottom: 1rem;
+    border-top: 1px solid $black-color;
+    padding: 1rem 0 0.5rem;
     margin: 0 4rem;
+  }
+
+  #view {
+    min-height: 100vh;
   }
 }
 </style>

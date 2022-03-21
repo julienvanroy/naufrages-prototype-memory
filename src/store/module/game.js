@@ -1,23 +1,6 @@
 import {shuffle, switchInArray} from "@/utils";
 
 const state = () => ({
-    players: [
-        {
-            name: 'Joueur 1',
-            color: 'red'
-        }, {
-            name: 'Joueur 2',
-            color: 'blue'
-        }, {
-            name: 'Joueur 3',
-            color: 'yellow'
-        },
-        {
-            name: 'Joueur 4',
-            color: 'green'
-        },
-    ],
-    roundPlayer: 0,
     cards: [],
     canReveal: false,
     canSwitch: false,
@@ -32,22 +15,18 @@ const getters = {
     gameHasStarted (state) {
         return state.cards.length !== 0
     },
-    currentPlayer(state) {
-        return state.players[state.roundPlayer]
-    }
 }
 
 // actions
 const actions = {
-    generateGame({ dispatch, commit, state }) {
-        const length = state.players.length
+    generateGame({ dispatch, commit, rootState }) {
+        const length = rootState.players.players.length
 
         // push neutral cards
-
         dispatch('pushCards', {number: length, color: 'grey'})
 
         // push player cards
-        state.players.map(player => {
+        rootState.players.players.map(player => {
             dispatch('pushCards', {number: length, color: player.color})
         })
 
@@ -63,8 +42,8 @@ const actions = {
         commit('setCardIsReveal', {card: card, value: true})
         commit('setCardHasReveal', {card: card, value: true})
     },
-    checkCard({commit, dispatch, getters}, {card}) {
-        if(card.color === getters.currentPlayer.color) {
+    checkCard({commit, dispatch, rootGetters}, {card}) {
+        if(card.color === rootGetters["players/currentPlayerColor"]) {
             commit('incrementNumberCardReveal')
             dispatch('checkGameOver')
         } else {
@@ -90,17 +69,16 @@ const actions = {
             dispatch('switchCard', {indexCard: indexCard})
         }
     },
-    checkCardHasReveal({getters, commit}, {card}) {
+    checkCardHasReveal({rootGetters, commit}, {card}) {
         if(card.hasReveal) {
             if(card.color === 'grey') {
-                console.log('coucou')
-                const changeColor = () =>  {commit('setCardColor', {card: card, value: getters.currentPlayer.color})}
+                const changeColor = () =>  {commit('setCardColor', {card: card, value: rootGetters["players/currentPlayerColor"]})}
                 setTimeout(changeColor, 1000)
             }
         }
     },
-    checkGameOver({state, commit}) {
-        if(state.numberCardReveal >= state.players.length) {
+    checkGameOver({state, commit, rootGetters}) {
+        if(state.numberCardReveal >= rootGetters["players/playersLength"]) {
             commit('gameOver')
         }
     },
@@ -118,7 +96,6 @@ const mutations = {
     },
     startGame(state) {
         shuffle(state.cards)
-        state.roundPlayer = 0
         state.canReveal = true
     },
     rotationGame(state) {
@@ -139,7 +116,6 @@ const mutations = {
         state.cards.map(card => card.isReveal = false)
 
         // Next Player
-        if (++state.roundPlayer >= state.players.length) state.roundPlayer = 0
 
         state.canReveal = true
         state.canSwitch = false
@@ -170,12 +146,12 @@ const mutations = {
     },
     resetGame(state) {
         state.cards = []
-        state.roundPlayer = 0
         state.canReveal = false
         state.canSwitch = false
         state.isGameOver =  false
         state.numberCardReveal = 0
         state.indexCardWantToSwitch = null
+        state.rotationAngle = 0
     }
 }
 

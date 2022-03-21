@@ -1,10 +1,10 @@
 <template>
   <div>
-    <strong v-if="canReveal"><span :style="{color: playerColor}">{{ playerName }}</span> peut reveal une
+    <strong v-if="canReveal"><span :style="{color: currentPlayerColor}">{{ currentPlayerName }}</span> peut reveal une
       carte</strong>
-    <strong v-else-if="canSwitch"><span :style="{color: playerColor}">{{ playerName }}</span> peut switch 2
+    <strong v-else-if="canSwitch"><span :style="{color: currentPlayerColor}">{{ currentPlayerName }}</span> peut switch 2
       cartes</strong>
-    <strong v-else-if="isGameOver"><span :style="{color: playerColor}">{{ playerName }}</span> a gagnée !</strong>
+    <strong v-else-if="isGameOver"><span :style="{color: currentPlayerColor}">{{ currentPlayerName }}</span> a gagnée !</strong>
     <strong v-else>Au tour du joueur suivant</strong>
   </div>
   <hr/>
@@ -13,19 +13,14 @@
 <script>
 import {createNamespacedHelpers} from "vuex";
 
-const {mapState, mapGetters} = createNamespacedHelpers('game')
+const {mapState: mapStateGame} = createNamespacedHelpers('game')
+const {mapGetters: mapGettersPlayers} = createNamespacedHelpers('players')
 
 export default {
   name: "MessageGame",
   computed: {
-    ...mapState(['canReveal', 'canSwitch', 'isGameOver']),
-    ...mapGetters(['currentPlayer']),
-    playerName() {
-      return this.currentPlayer.name
-    },
-    playerColor() {
-      return this.currentPlayer.color
-    },
+    ...mapStateGame(['canReveal', 'canSwitch', 'isGameOver']),
+    ...mapGettersPlayers(['currentPlayerName', 'currentPlayerColor'])
   }
 }
 </script>

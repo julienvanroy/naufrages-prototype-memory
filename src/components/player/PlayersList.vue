@@ -8,7 +8,7 @@
 import {createNamespacedHelpers} from "vuex";
 import PlayerCard from "@/components/player/PlayerCard";
 
-const { mapState } = createNamespacedHelpers('game')
+const { mapState } = createNamespacedHelpers('players')
 
 export default {
   name: "PlayersList",
@@ -24,5 +24,9 @@ export default {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
+
+    > div {
+      margin: 0 0.5rem;
+    }
   }
 </style>

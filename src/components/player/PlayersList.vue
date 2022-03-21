@@ -1,6 +1,6 @@
 <template>
   <div>
-    <PlayerCard v-for="(player, indexPlayer) in players" :key="indexPlayer" :name="player.name" :color="player.color"/>
+    <PlayerCard v-for="(player, indexPlayer) in players" :key="indexPlayer" :index="indexPlayer" :name="player.name" :color="player.color" :can-edit="canEdit"/>
   </div>
 </template>
 
@@ -13,6 +13,12 @@ const { mapState } = createNamespacedHelpers('players')
 export default {
   name: "PlayersList",
   components: {PlayerCard},
+  props: {
+    canEdit: {
+      type: Boolean,
+      default: false
+    }
+  },
   computed: {
     ...mapState(['players'])
   }

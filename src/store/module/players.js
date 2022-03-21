@@ -1,18 +1,22 @@
 const state = () => ({
     players: [
         {
-            name: 'Joueur 1',
+            name: 'Juju',
             color: 'red'
         }, {
-            name: 'Joueur 2',
+            name: 'Mama',
             color: 'blue'
         }, {
-            name: 'Joueur 3',
+            name: 'Mogo',
             color: 'yellow'
         },
         {
-            name: 'Joueur 4',
+            name: 'Vivi',
             color: 'green'
+        },
+        {
+            name: 'Titi',
+            color: 'orange'
         },
     ],
     roundPlayer: 0,
@@ -50,7 +54,7 @@ const mutations = {
         })
     },
     removePlayer(state, index) {
-        this.items.splice(index, 1);
+        state.players.splice(index, 1);
     },
     setRoundPlayer(state, value) {
         state.roundPlayer = value

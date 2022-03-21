@@ -1,6 +1,17 @@
 <template>
   <div>
-    <PlayersList/>
+    <PlayersList :can-edit="true"/>
+    <hr/>
+    Todo: Add Player
+    <hr/>
+    Todo: Set up Avatar
+    <hr/>
+    Todo: Nombres de carte par joueur
+    <hr/>
+    Todo: Nombes de carte neutre
+    <hr/>
+    Todo: Set up Timer
+    <hr/>
     <GenerateGame text="Start Game"/>
   </div>
 </template>

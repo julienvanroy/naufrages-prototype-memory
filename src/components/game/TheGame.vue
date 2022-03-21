@@ -2,7 +2,7 @@
   <div>
     <MessageGame/>
     <ActionsGame/>
-    <div class="cards" :style="{transform: `rotate(${rotationAngle}deg)`, height: '100vw'}">
+    <div class="cards" :style="{transform: `rotate(${rotationAngle}deg)`}">
       <TheCard v-for="(card, indexCard) in cards" :key="indexCard" :color="card.color" :is-reveal="card.isReveal"
                @click="clickCard({card: card, indexCard: indexCard})" :style="{transform: indexCardWantToSwitch === indexCard ? 'scale(1.1)' : null}"/>
     </div>
@@ -39,8 +39,10 @@ export default {
 
 <style lang="scss" scoped>
 .cards {
-  width: 100%;
-  height: 100%;
+  width: 100vh;
+  height: 100vh;
+  margin: auto;
+  overflow: scroll;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;

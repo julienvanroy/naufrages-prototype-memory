@@ -17,6 +17,10 @@ export default {
     color: {
       type: String,
       required: true
+    },
+    canEdit: {
+      type: Boolean,
+      default: false
     }
   },
   computed: {

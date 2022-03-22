@@ -47,10 +47,10 @@ const mutations = {
     setPlayers(state, payload) {
         state.players = payload
     },
-    addPlayer(state, {name, color}) {
+    addPlayer(state, payload) {
         state.players.push({
-            name: name,
-            color: color
+            name: payload.name,
+            color: payload.color
         })
     },
     removePlayer(state, index) {

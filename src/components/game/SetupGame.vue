@@ -1,8 +1,7 @@
 <template>
   <div>
-    <PlayersList :can-edit="true"/>
-    <hr/>
-    Todo: Add Player
+    <PlayersList :players="players" :can-edit="true"/>
+    <AddPlayer/>
     <hr/>
     Todo: Set up Avatar
     <hr/>
@@ -10,6 +9,7 @@
     <hr/>
     Todo: Nombes de carte neutre
     <hr/>
+    <InputSwitch/>
     Todo: Set up Timer
     <hr/>
     <GenerateGame text="Start Game"/>
@@ -19,10 +19,18 @@
 <script>
 import GenerateGame from "@/components/cta/GenerateGame";
 import PlayersList from "@/components/player/PlayersList";
+import {createNamespacedHelpers} from "vuex";
+import AddPlayer from "@/components/player/AddPlayer";
+import InputSwitch from "@/components/form/InputSwitch";
+const { mapState } = createNamespacedHelpers('players')
+
 
 export default {
   name: "SetupGame",
-  components: {PlayersList, GenerateGame}
+  components: {InputSwitch, AddPlayer, PlayersList, GenerateGame},
+  computed: {
+    ...mapState(['players'])
+  }
 }
 </script>
 

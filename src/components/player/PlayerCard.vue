@@ -2,7 +2,7 @@
   <div class="card">
     <AvatarPlayer :name="name" :color="color"/>
     <strong>{{name}}</strong>
-    <DeletePlayer :index="index" text="X" v-if="canEdit"/>
+    <DeletePlayer v-if="canEdit && index !== null" :index="index" text="X"/>
   </div>
 </template>
 
@@ -15,7 +15,7 @@ export default {
   props: {
     index: {
       type: Number,
-      required: true
+      default: null
     },
     name: {
       type: String,

@@ -21,8 +21,9 @@ export default {
 <style lang="scss" scoped>
 .card {
   border-radius: 10%;
-  width: 16rem;
-  height: 16rem;
+  width: 10rem;
+  height: 10rem;
   background: black;
+  margin: 1rem;
 }
 </style>

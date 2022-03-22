@@ -1,6 +1,6 @@
 <template>
   <div class="card">
-    <AvatarPlayer :name="name" :color="color"/>
+    <AvatarPlayer :avatar="avatar" :name="name" :color="color" :index="index" :can-edit="canEdit"/>
     <strong>{{name}}</strong>
     <DeletePlayer v-if="canEdit && index !== null" :index="index" text="X"/>
   </div>
@@ -16,6 +16,10 @@ export default {
     index: {
       type: Number,
       default: null
+    },
+    avatar: {
+      type: Number,
+      required: true
     },
     name: {
       type: String,

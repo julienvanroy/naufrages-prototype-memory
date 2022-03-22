@@ -1,10 +1,13 @@
 <template>
   <TheCta v-if="!showForm" text="Add Player" @click="setShowForm(true)"/>
-  <form v-else @submit.prevent="submit">
-    <InputText label="Name" v-model:value="name"/>
-    <InputColor label="Color" v-model:value="color"/>
-    <input type="submit"/>
-  </form>
+  <div v-else>
+    <hr/>
+    <form @submit.prevent="submit">
+      <InputText label="Name" v-model:value="name"/>
+      <InputColor label="Color" v-model:value="color"/>
+      <input type="submit" value="Ajouter"/>
+    </form>
+  </div>
 </template>
 
 <script>
@@ -48,7 +51,34 @@ export default {
 <style lang="scss" scoped>
 button {
   margin: 0.5rem auto;
-  background-color: $green-color;
-  color: $white-color;
+}
+
+form {
+  &:deep {
+    div {
+      margin: 0.5rem auto;
+
+      label {
+        margin: 0 0.5rem;
+        font-weight: bold;
+      }
+    }
+  }
+}
+
+input[type="submit"] {
+  padding: 0.5rem 1rem;
+  display: flex;
+  margin: 0.5rem auto;
+  justify-content: center;
+  align-items: center;
+  border: none;
+  border-radius: 7px;
+  cursor: pointer;
+  flex-direction: row;
+  text-transform: uppercase;
+  font-weight: bold;
+  background-color: $grey-color;
+  transition: 0.1s ease;
 }
 </style>

@@ -5,7 +5,7 @@
 <script>
 import TheCta from "@/components/cta/TheCta";
 import {createNamespacedHelpers} from "vuex";
-const { mapMutations } = createNamespacedHelpers('game')
+const { mapActions } = createNamespacedHelpers('game')
 
 export default {
   name: "NextRound",
@@ -17,7 +17,7 @@ export default {
   },
   components: {TheCta},
   methods: {
-    ...mapMutations(['nextRound']),
+    ...mapActions(['nextRound']),
   }
 }
 </script>

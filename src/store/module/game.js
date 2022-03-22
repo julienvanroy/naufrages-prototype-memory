@@ -6,7 +6,6 @@ const state = () => ({
     canSwitch: false,
     indexCardWantToSwitch: null,
     isGameOver: false,
-    numberCardReveal: 0,
     rotationAngle: 0
 })
 
@@ -19,17 +18,16 @@ const getters = {
 
 // actions
 const actions = {
-    generateGame({ dispatch, commit, rootState }) {
-        const length = rootState.players.players.length
-
+    generateGame({ dispatch, commit, rootState }, {numberByPlayers, numberByDefault}) {
         // push neutral cards
-        dispatch('pushCards', {number: length, color: 'grey'})
+        dispatch('pushCards', {number: numberByDefault, color: 'grey'})
 
         // push player cards
         rootState.players.players.map(player => {
-            dispatch('pushCards', {number: length, color: player.color})
+            dispatch('pushCards', {number: numberByPlayers, color: player.color})
         })
 
+        dispatch('players/startGame', parseInt(numberByPlayers), { root: true })
         commit('startGame')
     },
     pushCards({ commit }, {number, color}) {
@@ -44,7 +42,7 @@ const actions = {
     },
     checkCard({commit, dispatch, rootGetters}, {card}) {
         if(card.color === rootGetters["players/currentPlayerColor"]) {
-            commit('incrementNumberCardReveal')
+            commit('players/incrementPlayerCardsFind', null, {root:true})
             dispatch('checkGameOver')
         } else {
             dispatch('checkCardHasReveal', {card: card})
@@ -72,16 +70,21 @@ const actions = {
     checkCardHasReveal({rootGetters, commit}, {card}) {
         if(card.hasReveal) {
             if(card.color === 'grey') {
+                commit('players/incrementPlayerCardsToFind', null, {root:true})
                 const changeColor = () =>  {commit('setCardColor', {card: card, value: rootGetters["players/currentPlayerColor"]})}
                 setTimeout(changeColor, 1000)
             }
         }
     },
-    checkGameOver({state, commit, rootGetters}) {
-        if(state.numberCardReveal >= rootGetters["players/playersLength"]) {
+    checkGameOver({commit, rootGetters}) {
+        if(rootGetters["players/currentPlayer"].cardsFind >= rootGetters["players/currentPlayer"].cardsToFind) {
             commit('gameOver')
         }
     },
+    nextRound({commit, dispatch}) {
+        commit('nextRound')
+        dispatch('players/nextRound', null, {root: true})
+    }
 }
 
 // mutations
@@ -114,13 +117,9 @@ const mutations = {
     nextRound(state) {
         // Reset reveal cards
         state.cards.map(card => card.isReveal = false)
-
-        // Next Player
-
         state.canReveal = true
         state.canSwitch = false
         state.indexCardWantToSwitch = null
-        state.numberCardReveal = 0
     },
     switchCard(state, {indexA, indexB}) {
         switchInArray(state.cards, indexA, indexB)
@@ -134,9 +133,6 @@ const mutations = {
     setCardColor(state, {card, value}) {
         card.color = value
     },
-    incrementNumberCardReveal(state) {
-        state.numberCardReveal++
-    },
     setIndexCardWantToSwitch(state, value) {
         state.indexCardWantToSwitch = value
     },
@@ -149,7 +145,6 @@ const mutations = {
         state.canReveal = false
         state.canSwitch = false
         state.isGameOver =  false
-        state.numberCardReveal = 0
         state.indexCardWantToSwitch = null
         state.rotationAngle = 0
     }

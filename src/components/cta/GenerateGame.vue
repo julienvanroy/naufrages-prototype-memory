@@ -1,5 +1,5 @@
 <template>
-  <TheCta class="generate-game" @click="generateGame" :text="text"/>
+  <TheCta class="generate-game" @click="generateGame({numberByPlayers,numberByDefault})" :text="text"/>
 </template>
 
 <script>
@@ -13,7 +13,15 @@ export default {
     text: {
       type: String,
       default: "Generate Game"
-    }
+    },
+    numberByPlayers: {
+      type: Number,
+      default: 5
+    },
+    numberByDefault: {
+      type: Number,
+      default: 5
+    },
   },
   components: {TheCta},
   methods: {

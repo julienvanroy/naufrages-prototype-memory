@@ -1,6 +1,6 @@
 <template>
   <div v-if="players.length !== 0">
-    <PlayerCard v-for="(player, indexPlayer) in players" :key="indexPlayer" :index="indexPlayer" :name="player.name" :color="player.color" :can-edit="canEdit"/>
+    <PlayerCard v-for="(player, indexPlayer) in players" :key="indexPlayer" :index="indexPlayer" :avatar="player.avatar" :name="player.name" :color="player.color" :can-edit="canEdit"/>
   </div>
 </template>
 
